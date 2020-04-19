@@ -6,16 +6,19 @@ from PyQt5.QtCore import QSize
 
 from main_board import MainBoard
 
+
 class MainWindow(QMainWindow):
-    def __init__(self, height, width):
+    def __init__(self, height, width, image_size, device):
         super(MainWindow, self).__init__()
         self.setFixedSize(QSize(width, height))
 
-        self.main_board = MainBoard()
+        self.main_board = MainBoard(image_size, device)
 
         main_menubar = QMenuBar()
         main_menubar.addAction('Upload', self.uploadImage)
         main_menubar.addAction('Save', self.saveImage)
+        main_menubar.addAction('Origin', self.getOriginImage)
+        main_menubar.addAction('Translate', self.getTranslateImage)
 
         self.setMenuBar(main_menubar)
         self.setCentralWidget(self.main_board)
@@ -34,3 +37,9 @@ class MainWindow(QMainWindow):
         filename, tmp = QFileDialog.getSaveFileName(
             self, caption='Save Image', directory='./images', filter='*.png *.jpg *.bmp')
         self.main_board.saveImage(filename=filename)
+
+    def getOriginImage(self):
+        self.main_board.getOriginImage()
+
+    def getTranslateImage(self):
+        self.main_board.getTranslateImage()

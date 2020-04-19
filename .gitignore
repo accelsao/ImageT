@@ -81,5 +81,4 @@ fabric.properties
 __pycache__/
 
 
-!/pretrained/
-!/images/
+pretrained/

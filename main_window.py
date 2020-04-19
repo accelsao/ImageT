@@ -8,11 +8,11 @@ from main_board import MainBoard
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, height, width, image_size, device):
+    def __init__(self, args):
         super(MainWindow, self).__init__()
-        self.setFixedSize(QSize(width, height))
+        self.setFixedSize(QSize(args.main_window_width, args.main_window_height))
 
-        self.main_board = MainBoard(image_size, device)
+        self.main_board = MainBoard(args.image_size, args.device, args.pretrained_model, args.n_res)
 
         main_menubar = QMenuBar()
         main_menubar.addAction('Upload', self.uploadImage)
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         filename, tmp = QFileDialog.getOpenFileName(
             self, caption='Open Image', directory='./images', filter='*.png *.jpg *.bmp')
 
-        if filename is None:
+        if filename == "":
             return
 
         src = cv2.imread(filename)
@@ -36,6 +36,8 @@ class MainWindow(QMainWindow):
     def saveImage(self):
         filename, tmp = QFileDialog.getSaveFileName(
             self, caption='Save Image', directory='./images', filter='*.png *.jpg *.bmp')
+        if filename == "":
+            return
         self.main_board.saveImage(filename=filename)
 
     def getOriginImage(self):

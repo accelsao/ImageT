@@ -1,4 +1,4 @@
 # ImageT
 
 ## TODO
-- [ ] press save Image, exit
+- [ ] resize image to 256

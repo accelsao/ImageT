@@ -79,4 +79,7 @@ fabric.properties
 .idea/other.xml
 .idea/vcs.xml
 __pycache__/
-images/
+
+
+!/pretrained/
+!/images/

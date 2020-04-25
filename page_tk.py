@@ -1,3 +1,4 @@
+import argparse
 import threading
 import tkinter as tk
 from tkinter import filedialog
@@ -68,10 +69,15 @@ def resizeImg(w, h):
 
 
 class Application(tk.Frame):
-    def __init__(self, master=None, device='cpu', image_size=256):
+    def __init__(self, args, master=None):
         super(Application, self).__init__(master)
 
-        self.model = ImageTrans(image_size=image_size, device=device, pretrained_model='epoch_185.pth', n_res=4)
+        image_size = args.image_size
+        device = args.device
+        n_res = args.n_res
+        pretrained_model = args.pretrained_model
+
+        self.model = ImageTrans(image_size=image_size, device=device, pretrained_model=pretrained_model, n_res=n_res)
 
         self.entry_filename = None
         self.style = tk.IntVar()  # 1:去背 2:填色
@@ -165,10 +171,20 @@ class Application(tk.Frame):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--image_size', type=int, default=256, help='the size of image')
+    parser.add_argument('--device', type=str, default='cpu', choices=['cpu', 'cuda'], help='Set gpu mode; [cpu, cuda]')
+    parser.add_argument('--pretrained_model', type=str, default='draw2paintV3'
+                                                                '-256x_ugatit_idt2500_colorpreserve_epoch_190.pth',
+                        help='pretrianed model')
+    parser.add_argument('--n_res', type=int, default=4, help='The number of resnet block')
+
+    args = parser.parse_args()
+
     root = tk.Tk()
     root.geometry("1075x550")
     root.configure(bg='white')
     root.resizable(0, 0)
 
-    app = Application(master=root)
+    app = Application(args=args, master=root)
     app.mainloop()

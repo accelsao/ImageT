@@ -2,6 +2,8 @@ import argparse
 import threading
 import tkinter as tk
 from tkinter import filedialog
+
+import cv2
 from PIL import Image, ImageTk
 import get_sketch
 import start_removeBack as rm
@@ -10,7 +12,6 @@ import torchvision.transforms as transforms
 import torch
 import os
 from utils import tensor2im
-
 
 class ImageTrans:
     def __init__(self, image_size, device, pretrained_model, n_res):
@@ -134,11 +135,12 @@ class Application(tk.Frame):
         img_before.image = load_img
         img_before.place(x=self.g, y=6 * self.g)
 
-        # precompute
-        self.computeStyle2 = threading.Thread(target=self.model.computeTranslateImage,
-                                              args=(open_img,))
-        self.computeStyle2.start()
+        # # precompute
+        # self.computeStyle2 = threading.Thread(target=self.model.computeTranslateImage,
+        #                                       args=(open_img,))
+        # self.computeStyle2.start()
         self.file = file
+        self.open_img = open_img
 
     def transfer_click(self):
         self.text_loading.configure(text='轉換中...')
@@ -160,7 +162,14 @@ class Application(tk.Frame):
             img_before.place(x=2 * self.g + self.image_size, y=6 * self.g)
 
         elif self.style.get() == 2:
-            self.computeStyle2.join()
+            # self.computeStyle2.join()
+            try:
+                im = Image.open('images/dst.png').resize((256, 256))
+                self.open_img = im
+            except:
+                pass
+
+            self.model.computeTranslateImage(self.open_img)
 
             load_img = ImageTk.PhotoImage(image=Image.fromarray(self.model.fake_image))
             img = tk.Label(self.master, image=load_img)

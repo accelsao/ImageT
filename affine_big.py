@@ -155,7 +155,9 @@ def affine(img_input, threshold):
     cv2.circle(imd_pad,(row_center,col_center),50,[255,0,255],-1)
     print('final corners: ',corners)
     '''
-    pyplot.imshow(cv2.cvtColor(imd_pad, cv2.COLOR_BGR2RGB))
+    img = cv2.cvtColor(imd_pad, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/imd_pad.png', img)
+    pyplot.imshow(img)
     pyplot.show()
 
     # 以平均中心點為基準，將corners依照"左上 左下 右上 右下"順序排列
@@ -175,7 +177,9 @@ def affine(img_input, threshold):
     # print(M)
     dst = cv2.warpPerspective(imd_pad_copy, M, (cols, rows))
 
-    pyplot.imshow(cv2.cvtColor(dst, cv2.COLOR_BGR2RGB))
+    # dst = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
+    pyplot.imshow(dst)
+    cv2.imwrite('images/dst.png', dst)
     pyplot.show()
 
     return dst
